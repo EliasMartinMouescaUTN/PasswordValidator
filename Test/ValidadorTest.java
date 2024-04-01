@@ -3,6 +3,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+// Lots of logic repetition, how to fix?!?
+
 public class ValidadorTest {
     PasswordValidator validador;
 
@@ -45,7 +47,7 @@ public class ValidadorTest {
 
         @Test
         public void passwordIsInBlacklist() {
-            // This is a valid password, since no blacklist was specified
+            // This is a valid password since no blacklist was specified
             Assertions.assertTrue(validador.validate("password"));
         }
 
@@ -56,5 +58,29 @@ public class ValidadorTest {
 
     }
 
+    @Nested
+    class TestWithWrongBlacklistPath {
+        @BeforeEach
+        public void init() {
+            validador = new PasswordValidator("NotAnExistingFile.txt");
+        }
+
+        @Test
+        public void passwordTooShort() {
+            Assertions.assertFalse(validador.validate("lal"));
+        }
+
+        @Test
+        public void passwordIsInBlacklist() {
+            // This is a valid password since no blacklist was specified
+            Assertions.assertTrue(validador.validate("password"));
+        }
+
+        @Test
+        public void validPassword() {
+            Assertions.assertTrue(validador.validate("AguanteLaUTNLoco"));
+        }
+
+    }
 
 }
