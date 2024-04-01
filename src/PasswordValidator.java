@@ -14,7 +14,10 @@ public class PasswordValidator {
 
         if (pathToPasswordBlacklist != null) {
             passwordBlacklist = new File(pathToPasswordBlacklist);
-            if (!passwordBlacklist.isFile()) System.out.println("Passed path is not a valid file!");
+            if (!passwordBlacklist.isFile()) {
+                System.out.println("Given path is not a valid file! blacklist test will not be conducted.");
+                passwordBlacklist = null;
+            }
         } else {
             System.out.println("Blacklist path is null, blacklist test will not be conducted!");
             passwordBlacklist = null;
@@ -37,6 +40,7 @@ public class PasswordValidator {
                 if (Objects.equals(scanner.nextLine(), potentialPassword)) return true;
 
         } catch (FileNotFoundException e) {
+            // It should never reach this block, we validated the blacklist path in the constructor... but who knows.
             return false;
         }
 
