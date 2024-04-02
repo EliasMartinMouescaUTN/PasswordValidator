@@ -33,15 +33,21 @@ public class PasswordValidator {
 
         if (passwordBlacklist == null) return false;
 
+        Scanner scanner = null;
+
         try {
-            Scanner scanner = new Scanner(passwordBlacklist);
+            scanner = new Scanner(passwordBlacklist);
 
             while (scanner.hasNextLine())
                 if (Objects.equals(scanner.nextLine(), potentialPassword)) return true;
 
         } catch (FileNotFoundException e) {
             // It should never reach this block, we validated the blacklist path in the constructor... but who knows.
+            System.err.println("Blacklist file not found! " + e.getMessage());
             return false;
+        } finally {
+            if (scanner != null)
+                scanner.close();
         }
 
         return false;
